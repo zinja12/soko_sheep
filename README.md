@@ -1,6 +1,6 @@
 # SokoSheep
 
-soko_sheep is a sokoban game where you herd sheep
+soko_sheep is a sokoban (sheep-koban) game where you herd sheep
 
 ## Tools needed
 Raylib v6.2 (Game library and utils)
