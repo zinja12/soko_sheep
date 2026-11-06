@@ -158,7 +158,7 @@ void world_unload(World *world) {
 
 bool world_init(World* world) {
     *world = (World){ 0 };
-    return world_load_level(world, 19);
+    return world_load_level(world, 0);
 }
 
 void world_start_transition(World *world, int next_level) {
@@ -270,10 +270,6 @@ void world_sheep_arrived(World *world, Sheep *sheep) {
 
     bool still_sliding = sheep->state == SHEEP_SLIDE && !near_wolf;
     sheep->state = SHEEP_REST;
-    if (still_sliding) {
-        world_sheep_knock(world, sheep, sheep->dx, sheep->dy);
-    }
-
     if (still_sliding && !world_sheep_knock(world, sheep, sheep->dx, sheep->dy)) {
         //nothing could move so sheep hit something
         Vector2 contact = { sheep->position.x + TILE_SIZE + sheep->dx * TILE_SIZE, sheep->position.y + TILE_SIZE + sheep->dy * TILE_SIZE };
