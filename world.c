@@ -136,6 +136,7 @@ bool world_load(World *world, const char *path) {
     player_init(&world->player, spawn_x, spawn_y);
     world->chicken_bark_time = 0.0f;
     world->particle_system.count = 0;
+    world->shake = (ShakeEffect){ 0 };
     world->undo_next = world->undo_count = 0;
     return true;
 }
@@ -270,10 +271,18 @@ void world_sheep_arrived(World *world, Sheep *sheep) {
 
     bool still_sliding = sheep->state == SHEEP_SLIDE && !near_wolf;
     sheep->state = SHEEP_REST;
-    if (still_sliding && !world_sheep_knock(world, sheep, sheep->dx, sheep->dy)) {
-        //nothing could move so sheep hit something
-        Vector2 contact = { sheep->position.x + TILE_SIZE + sheep->dx * TILE_SIZE, sheep->position.y + TILE_SIZE + sheep->dy * TILE_SIZE };
-        particle_burst(&world->particle_system, contact, (Vector2){ (float)-sheep->dx, (float)-sheep->dy }, HIT_PARTICLES, WHITE);
+    if (still_sliding) {
+        //check if the knock moves the sheep in front
+        bool hit_sheep = world_sheep_at(world, sheep->tile_x + sheep->dx, sheep->tile_y + sheep->dy) != NULL;
+        bool knocked = world_sheep_knock(world, sheep, sheep->dx, sheep->dy);
+        if (!knocked) {
+            //nothing moves so sheep must have hit something
+            Vector2 contact = { sheep->position.x + TILE_SIZE + sheep->dx * TILE_SIZE, sheep->position.y + TILE_SIZE + sheep->dy * TILE_SIZE };
+            particle_burst(&world->particle_system, contact, (Vector2){ (float)-sheep->dx, (float)-sheep->dy }, HIT_PARTICLES, WHITE);
+        }
+        if (hit_sheep || !knocked) {
+            shake_trigger(&world->shake, HIT_SHAKE_STRENGTH, HIT_SHAKE_TIME);
+        }
     }
 }
 
@@ -437,6 +446,8 @@ void world_update(World* world, GameTime game_time, const Input* input) {
 
     particle_update(&world->particle_system, game_time);
 
+    shake_update(&world->shake, game_time);
+
     if (world->transitioning) {
         bool was_fading_out = world->transition_time < FADE_TIME;
         world->transition_time += game_time.elapsed;
@@ -516,7 +527,9 @@ ScreenTarget world_as_screen_target(World *world) {
 }
 
 void world_draw(void *self) {
-     World *world = (World *)self;
+    World *world = (World *)self;
+    
+    BeginMode2D(shake_get_camera(&world->shake));
 
     //draw tiles
     for (int y = 0; y < world->height; y++) {
@@ -537,6 +550,8 @@ void world_draw(void *self) {
     }
 
     particle_draw(&world->particle_system);
+
+    EndMode2D();
 
     if (world->transitioning) {
         //0 to 1 over the fade out, back to 0 over the fade in

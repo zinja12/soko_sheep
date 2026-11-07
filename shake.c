@@ -28,7 +28,7 @@ void shake_update(ShakeEffect* shake, GameTime game_time) {
 
     //use get random value for angles
     float angle = GetRandomValue(0, 359) * DEG2RAD;
-    shake->offset = (Vector2){ cosf(angle) * current_intensity, sinf(angle) * current_intensity };
+    shake->offset = (Vector2) {roundf(cosf(angle) * current_intensity), roundf(sinf(angle) * current_intensity) };
 
     if (shake->timer <= 0.0f) {
         shake->timer = 0.0f;

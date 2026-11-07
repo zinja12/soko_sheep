@@ -7,8 +7,12 @@
 #include "particle.h"
 #include "player.h"
 #include "screen_target.h"
+#include "shake.h"
 #include "sheep.h"
 #include "tile.h"
+
+#define HIT_SHAKE_STRENGTH 2.0f
+#define HIT_SHAKE_TIME 0.2f
 
 #define UNDO_MAX 256
 #define UNDO_MAX_TILES ((VIRTUAL_WIDTH / TILE_DRAW_SIZE) * (VIRTUAL_HEIGHT / TILE_DRAW_SIZE))
@@ -38,6 +42,8 @@ typedef struct World {
     ParticleSystem particle_system;
 
     bool finished;
+
+    ShakeEffect shake;
 
     UndoStep undo_steps[UNDO_MAX];
     int undo_next, undo_count;
