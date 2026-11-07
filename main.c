@@ -62,7 +62,9 @@ static void update_draw_frame(void) {
             while (game.time_accumulator >= FIXED_DT) {
                 game.game_time.elapsed = FIXED_DT;
                 game.game_time.total += FIXED_DT;
-                title_update(&game.title, game.game_time, &game.input);
+                if (title_update(&game.title, game.game_time, &game.input)) {
+                    game_state = GAME;
+                }
                 //click is handled in one frame only, reset after
                 game.input.click = game.input.start = game.input.reset = game.input.undo = false;
                 game.time_accumulator -= FIXED_DT;

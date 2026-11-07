@@ -32,7 +32,7 @@ bool title_init(TitleScreen *title) {
     return true;
 }
 
-void title_update(TitleScreen* title, GameTime game_time, const Input* input) {
+bool title_update(TitleScreen* title, GameTime game_time, const Input* input) {
     //update tiles
     for (int y = 0; y < SCREEN_TILE_SIZE; y++) {
         for (int x = 0; x < SCREEN_TILE_SIZE; x++) {
@@ -47,6 +47,11 @@ void title_update(TitleScreen* title, GameTime game_time, const Input* input) {
     }
 
     animation_update(&title->z_animation, game_time);
+
+    if (input->undo) {
+        return true;
+    }
+    return false;
 }
 
 ScreenTarget title_as_screen_target(TitleScreen *title) {
@@ -72,7 +77,7 @@ void title_draw(void *self) {
     Rectangle h_source = (Rectangle) { 5 * TILE_SIZE, 3 * TILE_SIZE, TILE_SIZE, TILE_SIZE };
     Rectangle e_source = (Rectangle) { 4 * TILE_SIZE, 3 * TILE_SIZE, TILE_SIZE, TILE_SIZE };
     Rectangle p_source = (Rectangle) { 4 * TILE_SIZE, 4 * TILE_SIZE, TILE_SIZE, TILE_SIZE };
-    Rectangle t_source = (Rectangle) { 0 * TILE_SIZE, 4 * TILE_SIZE, TILE_SIZE, TILE_SIZE };
+    //Rectangle t_source = (Rectangle) { 0 * TILE_SIZE, 4 * TILE_SIZE, TILE_SIZE, TILE_SIZE };
     Rectangle r_source = (Rectangle) { 3 * TILE_SIZE, 3 * TILE_SIZE, TILE_SIZE, TILE_SIZE };
     Rectangle k_source = (Rectangle) { 1 * TILE_SIZE, 3 * TILE_SIZE, TILE_SIZE, TILE_SIZE };
     Rectangle x_source = (Rectangle) { 5 * TILE_SIZE, 4 * TILE_SIZE, TILE_SIZE, TILE_SIZE };

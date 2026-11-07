@@ -21,7 +21,7 @@ typedef struct TitleScreen {
 } TitleScreen;
 
 bool title_init(TitleScreen* title);
-void title_update(TitleScreen* title, GameTime game_time, const Input* input);
+bool title_update(TitleScreen* title, GameTime game_time, const Input* input);
 void title_draw(void *self);
 ScreenTarget title_as_screen_target(TitleScreen *title);
 
