@@ -8,8 +8,6 @@
 #include "sheep.h"
 #include "tile.h"
 
-#define SCREEN_TILE_SIZE 10
-
 typedef struct TitleScreen {
     Tile tiles[10][10];
     int width, height;

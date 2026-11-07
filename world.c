@@ -442,6 +442,10 @@ void world_update(World* world, GameTime game_time, const Input* input) {
         world->transition_time += game_time.elapsed;
         //swap levels while the screen is fully black
         if (was_fading_out && world->transition_time >= FADE_TIME) {
+            if (world->next_level >= LEVEL_COUNT) {
+                world->finished = true;
+                return;
+            }
             world_load_level(world, world->next_level);
         }
         if (world->transition_time >= FADE_TIME * 2.0f) {
@@ -481,7 +485,7 @@ void world_update(World* world, GameTime game_time, const Input* input) {
     }
 
     if (world_is_solved(world)) {
-        world_start_transition(world, (world->level_idx + 1) % LEVEL_COUNT);
+        world_start_transition(world, world->level_idx + 1);
         return;
     }
 

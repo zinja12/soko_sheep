@@ -1,6 +1,7 @@
 //include header files
 #include "assets.h"
 #include "constants.h"
+#include "end_screen.h"
 #include "game_time.h"
 #include "input.h"
 #include "raylib.h"
@@ -27,6 +28,7 @@ typedef struct Game {
     ScreenCanvas canvas;
     TitleScreen title;
     World world;
+    EndScreen end;
     GameTime game_time;
     Input input;
     float time_accumulator;
@@ -76,11 +78,30 @@ static void update_draw_frame(void) {
                 game.game_time.elapsed = FIXED_DT;
                 game.game_time.total += FIXED_DT;
                 world_update(&game.world, game.game_time, &game.input);
+                if (game.world.finished) {
+                    end_init(&game.end);
+                    game_state = END;
+                }
                 //click is handled in one frame only, reset after
                 game.input.click = game.input.start = game.input.reset = game.input.undo = false;
                 game.time_accumulator -= FIXED_DT;
             }
             canvas_draw(&game.canvas, world_as_screen_target(&game.world));
+            break;
+        case END:
+            while (game.time_accumulator >= FIXED_DT) {
+                game.game_time.elapsed = FIXED_DT;
+                game.game_time.total += FIXED_DT;
+                if (end_update(&game.end, game.game_time, &game.input)) {
+                    world_unload(&game.world);
+                    world_init(&game.world);
+                    game_state = TITLE;
+                }
+                //click is handled in one frame only, reset after
+                game.input.click = game.input.start = game.input.reset = game.input.undo = false;
+                game.time_accumulator -= FIXED_DT;
+            }
+            canvas_draw(&game.canvas, end_as_screen_target(&game.end));
             break;
         default:
             break;

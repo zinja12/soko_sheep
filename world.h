@@ -37,6 +37,8 @@ typedef struct World {
 
     ParticleSystem particle_system;
 
+    bool finished;
+
     UndoStep undo_steps[UNDO_MAX];
     int undo_next, undo_count;
 } World;
