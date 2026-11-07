@@ -1,6 +1,7 @@
 #ifndef TITLE_SCREEN_H
 #define TITLE_SCREEN_H
 
+#include "animation.h"
 #include "game_time.h"
 #include "input.h"
 #include "screen_target.h"
@@ -15,8 +16,8 @@ typedef struct TitleScreen {
 
     Sheep sheep[2];
     int sheep_count;
-
     
+    Animation z_animation;
 } TitleScreen;
 
 bool title_init(TitleScreen* title);

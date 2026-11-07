@@ -27,6 +27,8 @@ bool title_init(TitleScreen *title) {
     sheep_init(&title->sheep[0], 3, 4, false);
     sheep_init(&title->sheep[1], 5, 4, false);
     title->sheep_count = 2;
+
+    title->z_animation = animation_create(450.0f, 3, 1 * TILE_SIZE, 4 * TILE_SIZE, TILE_SIZE, TILE_SIZE);
     return true;
 }
 
@@ -43,6 +45,8 @@ void title_update(TitleScreen* title, GameTime game_time, const Input* input) {
         Sheep *sheep = &title->sheep[i];
         sheep_update(sheep, game_time);
     }
+
+    animation_update(&title->z_animation, game_time);
 }
 
 ScreenTarget title_as_screen_target(TitleScreen *title) {
@@ -71,6 +75,7 @@ void title_draw(void *self) {
     Rectangle t_source = (Rectangle) { 0 * TILE_SIZE, 4 * TILE_SIZE, TILE_SIZE, TILE_SIZE };
     Rectangle r_source = (Rectangle) { 3 * TILE_SIZE, 3 * TILE_SIZE, TILE_SIZE, TILE_SIZE };
     Rectangle k_source = (Rectangle) { 1 * TILE_SIZE, 3 * TILE_SIZE, TILE_SIZE, TILE_SIZE };
+    Rectangle x_source = (Rectangle) { 5 * TILE_SIZE, 4 * TILE_SIZE, TILE_SIZE, TILE_SIZE };
     Rectangle dog_source = (Rectangle) { 1 * TILE_SIZE, 5 * TILE_SIZE, TILE_SIZE, TILE_SIZE };
 
     Rectangle s_destination1 = (Rectangle) { 2 * TILE_DRAW_SIZE, 4 * TILE_DRAW_SIZE, TILE_DRAW_SIZE, TILE_DRAW_SIZE };
@@ -85,6 +90,14 @@ void title_draw(void *self) {
     Rectangle dog_destination = (Rectangle) { 7 * TILE_DRAW_SIZE, 5 * TILE_DRAW_SIZE, TILE_DRAW_SIZE, TILE_DRAW_SIZE };
     Rectangle z_destination = (Rectangle) { 7 * TILE_DRAW_SIZE, 4 * TILE_DRAW_SIZE, TILE_DRAW_SIZE, TILE_DRAW_SIZE };
 
+    //press x
+    Rectangle p_destination2 = (Rectangle) { 2 * TILE_DRAW_SIZE, 8 * TILE_DRAW_SIZE, TILE_DRAW_SIZE, TILE_DRAW_SIZE };
+    Rectangle r_destination = (Rectangle) { 3 * TILE_DRAW_SIZE, 8 * TILE_DRAW_SIZE, TILE_DRAW_SIZE, TILE_DRAW_SIZE };
+    Rectangle e_destination3 = (Rectangle) { 4 * TILE_DRAW_SIZE, 8 * TILE_DRAW_SIZE, TILE_DRAW_SIZE, TILE_DRAW_SIZE };
+    Rectangle s_destination3 = (Rectangle) { 5 * TILE_DRAW_SIZE, 8 * TILE_DRAW_SIZE, TILE_DRAW_SIZE, TILE_DRAW_SIZE };
+    Rectangle s_destination4 = (Rectangle) { 6 * TILE_DRAW_SIZE, 8 * TILE_DRAW_SIZE, TILE_DRAW_SIZE, TILE_DRAW_SIZE };
+    Rectangle x_destination = (Rectangle) { 8 * TILE_DRAW_SIZE, 8 * TILE_DRAW_SIZE, TILE_DRAW_SIZE, TILE_DRAW_SIZE };
+
     Vector2 origin = (Vector2) { 0, 0 };
 
     DrawTexturePro(image_tileset, s_source, s_destination1, origin, 0.0f, WHITE);
@@ -97,5 +110,12 @@ void title_draw(void *self) {
     DrawTexturePro(image_tileset, p_source, p_destination, origin, 0.0f, WHITE);
 
     DrawTexturePro(image_tileset, dog_source, dog_destination, origin, 0.0f, WHITE);
-    //DrawTexturePro(image_tileset, title->z_animation.source_rect, z_destination, origin, 0.0f, WHITE);
+    DrawTexturePro(image_tileset, title->z_animation.source_rect, z_destination, origin, 0.0f, WHITE);
+
+    DrawTexturePro(image_tileset, p_source, p_destination2, origin, 0.0f, WHITE);
+    DrawTexturePro(image_tileset, r_source, r_destination, origin, 0.0f, WHITE);
+    DrawTexturePro(image_tileset, e_source, e_destination3, origin, 0.0f, WHITE);
+    DrawTexturePro(image_tileset, s_source, s_destination3, origin, 0.0f, WHITE);
+    DrawTexturePro(image_tileset, s_source, s_destination4, origin, 0.0f, WHITE);
+    DrawTexturePro(image_tileset, x_source, x_destination, origin, 0.0f, WHITE);
 }

@@ -42,9 +42,9 @@ static void gather_input(Input* input, const ScreenCanvas* canvas) {
         (float)((IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN)) - (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP)))
     };
     input->click = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
-    input->start |= IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_ENTER);
+    input->start |= IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_C);
     input->reset |= IsKeyPressed(KEY_R);
-    input->undo |= IsKeyPressed(KEY_Z);
+    input->undo |= IsKeyPressed(KEY_X);
 }
 
 static void update_draw_frame(void) {
