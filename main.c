@@ -32,6 +32,7 @@ typedef struct Game {
     GameTime game_time;
     Input input;
     float time_accumulator;
+    Music background_music;
 } Game;
 
 static Game game;
@@ -50,6 +51,8 @@ static void gather_input(Input* input, const ScreenCanvas* canvas) {
 }
 
 static void update_draw_frame(void) {
+    //update stream buffer for music every frame
+    UpdateMusicStream(game.background_music);
     //gather input each frame
     gather_input(&game.input, &game.canvas);
 
@@ -125,8 +128,8 @@ int main(void) {
         TraceLog(LOG_ERROR, "could not load assets/tileset.png");
     }
     //load and start playing background music
-    Music background_music = LoadMusicStream("assets/audio/music/soko_sheep_background_music.ogg");
-    SetMusicVolume(background_music, 0.7f);
+    game.background_music = LoadMusicStream("assets/audio/music/soko_sheep_background_music.ogg");
+    SetMusicVolume(game.background_music, 0.7f);
 
     //initialization of game things
     //init game state
@@ -141,9 +144,10 @@ int main(void) {
     }
 
     //start playing music
-    PlayMusicStream(background_music);
+    PlayMusicStream(game.background_music);
 
     #if defined(__EMSCRIPTEN__)
+    emscripten_run_script("document.addEventListener('keydown', function() { miniaudio.unlock(); }, { once: true, capture: true });");
     //0 = browser refresh rate (requestAnimationFrame)
     emscripten_set_main_loop(update_draw_frame, 0, 1);
     #else
@@ -151,8 +155,6 @@ int main(void) {
     while (!WindowShouldClose()) {
         //draw and update
         update_draw_frame();
-        //update stream buffer for music every frame
-        UpdateMusicStream(background_music);
     }
     #endif
 
@@ -160,7 +162,7 @@ int main(void) {
     canvas_unload(&game.canvas);
     assets_unload();
     //close audio device
-    UnloadMusicStream(background_music);
+    UnloadMusicStream(game.background_music);
     CloseAudioDevice();
     CloseWindow();
     return 0;
