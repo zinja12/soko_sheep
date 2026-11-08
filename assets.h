@@ -9,6 +9,7 @@ typedef enum SoundEffects {
     SFX_CHICK_CHIRP,
     SFX_WOLF_GROWL,
     SFX_PEN,
+    SFX_SHEEP_HIT,
     SFX_COUNT
 } SoundEffects;
 

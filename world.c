@@ -262,8 +262,6 @@ void world_sheep_arrived(World *world, Sheep *sheep) {
         if (world_sheep_can_enter(world, sheep->tile_x + away_x, sheep->tile_y + away_y)) {
             sheep->state = SHEEP_REST;
             PlaySound(sound_effects[SFX_WOLF_GROWL]);
-            
-
             sheep_start_step(sheep, away_x, away_y, STEP_TIME);
             return;
         }
@@ -281,6 +279,7 @@ void world_sheep_arrived(World *world, Sheep *sheep) {
             particle_burst(&world->particle_system, contact, (Vector2){ (float)-sheep->dx, (float)-sheep->dy }, HIT_PARTICLES, WHITE);
         }
         if (hit_sheep || !knocked) {
+            PlaySound(sound_effects[SFX_SHEEP_HIT]);
             shake_trigger(&world->shake, HIT_SHAKE_STRENGTH, HIT_SHAKE_TIME);
         }
     }

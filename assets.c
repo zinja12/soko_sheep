@@ -9,7 +9,8 @@ char *SFX_PATHS[SFX_COUNT] = {
     [SFX_SHEEP_BLEAT] = "assets/audio/sfx/sheep_bleat_gameboy.ogg",
     [SFX_CHICK_CHIRP] = "assets/audio/sfx/chick_chirp_gameboy.ogg",
     [SFX_WOLF_GROWL] = "assets/audio/sfx/wolf_growl_gameboy.ogg",
-    [SFX_PEN] = "assets/audio/sfx/sheep_pen_gameboy.ogg"
+    [SFX_PEN] = "assets/audio/sfx/sheep_pen_gameboy.ogg",
+    [SFX_SHEEP_HIT] = "assets/audio/sfx/sheep_hit.ogg"
 };
 //define global tileset
 Texture2D image_tileset = { 0 };
