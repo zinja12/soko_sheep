@@ -148,6 +148,8 @@ int main(void) {
 
     #if defined(__EMSCRIPTEN__)
     emscripten_run_script("document.addEventListener('keydown', function() { miniaudio.unlock(); }, { once: true, capture: true });");
+    //stop arrows keys and space from scrolling page in browser since the game is embedded
+    emscripten_run_script("window.addEventListener('keydown', function(e) { if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) e.preventDefault(); });");
     //0 = browser refresh rate (requestAnimationFrame)
     emscripten_set_main_loop(update_draw_frame, 0, 1);
     #else
